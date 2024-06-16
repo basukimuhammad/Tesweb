@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css">
+  <link rel="shortcut icon" href="https://telegra.ph/file/c1603a7e2cf99ab1ad084.jpg" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <title>Dashboard | Basuki Store</title>
+</head>
+<body>
+  <div id="navside-container" data-include="navside.html"></div>
+  <div class="content">
+    <h1>Selamat Datang di Basuki Store!</h1>
+    <p>Di sini Anda dapat menemukan berbagai produk berkualitas dengan harga terbaik.</p>
+    <div class="chat-container">
+      <div class="chat-header">
+        <h3>Chat with Us</h3>
+      </div>
+      <div class="chat-body" id="chatBody">
+      </div>
+      <div class="chat-footer">
+        <input type="text" id="chatInput" placeholder="Type your message here..." />
+        <button id="sendBtn"><i class="fa fa-paper-plane"></i></button>
+      </div>
+    </div>
+  </div>
+  <script src="main.js"></script>
+  <script src="chat.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const currentPage = window.location.pathname.split('/').pop();
+      const menuItems = document.querySelectorAll('.nav_link');
+
+      menuItems.forEach(item => {
+        const itemPage = item.getAttribute('href');
+        if (itemPage === currentPage) {
+          item.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

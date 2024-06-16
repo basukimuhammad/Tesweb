@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Web ChatGPT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .user-message {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .bot-message {
+            background-color: #e1e1e1;
+            padding: 10px;
+            border-radius: 5px;
+            position: relative;
+        }
+        .bot-message::after {
+            content: "Loading";
+            animation: loading 1s infinite;
+        }
+        @keyframes loading {
+            0% {
+                content: "Loading";
+            }
+            33% {
+                content: "Loading.";
+            }
+            66% {
+                content: "Loading..";
+            }
+            100% {
+                content: "Loading...";
+            }
+        }
+        #chat-container {
+            margin-bottom: 60px;
+        }
+        #chat-form {
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #f1f1f1;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        #user-input:focus {
+            outline: none;
+        }
+       /* Custom CSS for Buttons */
+       #send-button,
+        #voice-button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #send-button:hover,
+        #voice-button:hover {
+            background-color: #45a049;
+        }
+
+        #voice-button {
+            background-color: #4285f4;
+        }
+
+        #voice-button:hover {
+            background-color: #1a73e8;
+        }
+
+        .voice-animation {
+            animation: voice-animation 1s infinite;
+        }
+
+        .icon-white {
+            color: white !important;
+        }
+
+        @keyframes voice-animation {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .long-press-animation {
+            animation: long-press-animation 0.5s infinite;
+        }
+
+        @keyframes long-press-animation {
+            0% {
+                background-color: #4285f4;
+            }
+
+            50% {
+                background-color: #1a73e8;
+            }
+
+            100% {
+                background-color: #4285f4;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="https://telegra.ph/file/c1603a7e2cf99ab1ad084.jpg" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <!-- Container for the navbar and sidebar -->
+    <div id="navside-container" data-include="navside.html"></div>
+
+    <div class="content">
+        <h1>Chat GPT </h1>
+        <div id="chat-container"></div>
+        <form id="chat-form">
+            <input type="text" id="user-input" placeholder="Type in here..." autocomplete="off">
+            <button type="submit" id="send-button"><i class="fa fa-paper-plane" style="color: white;"></i></button>
+            <button type="button" id="voice-button"><i class="fa fa-microphone" style="color: white;"></i></button>
+        </form>
+    </div>
+    <!-- main js -->
+    <script src="main.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var longPressTimer;
+    var isLongPress = false;
+    var isPlaying = false;
+    var audioElement;
+    var recognition;
+    
+    function playTextToSpeech(text) {
+        if (isPlaying) {
+            audioElement.pause();
+            $('#voice-button').text('▶️');
+        } else {
+            var audioUrl = 'https://api.streamelements.com/kappa/v2/speech?voice=Andika&text=' + encodeURIComponent(text);
+            audioElement = new Audio(audioUrl);
+            audioElement.play()
+                .then(function() {
+                    $('#voice-button').html('<i class="fa-solid fa-pause icon-white"></i>');
+                    isPlaying = true;
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                });
+        }
+    }
+    
+    function stopTextToSpeech() {
+        if (isPlaying) {
+            audioElement.pause();
+            isPlaying = false;
+            $('#voice-button').html('<i class="fa-solid fa-play icon-white"></i>');
+        }
+    }
+    
+    function startSpeechToText() {
+        recognition = new webkitSpeechRecognition();
+        recognition.lang = 'id-ID';
+        recognition.continuous = true;
+        recognition.interimResults = true;
+    
+        recognition.onresult = function(event) {
+            var transcript = event.results[event.results.length - 1][0].transcript;
+            $('#user-input').val(transcript);
+        }
+    
+        recognition.start();
+    }
+    
+    function stopSpeechToText() {
+        if (recognition) {
+            recognition.stop();
+        }
+    }
+    
+    function sendMessage() {
+        stopTextToSpeech();
+        var message = $('#user-input').val();
+        if (message.trim() === '') {
+            return;
+        }
+    
+        displayUserMessage(message);
+        $('#user-input').val('');
+    
+        var botMessage = $('<div>').addClass('message bot-message');
+        $('#chat-container').append(botMessage);
+    
+        $.ajax({
+            url: 'https://aemt.me/gemini',
+            type: 'GET',
+            data: {text: message},
+            success: function(response) {
+                botMessage.text(response.result);
+                botMessage.removeClass('bot-message');
+                playTextToSpeech(response.result);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+    
+    function displayUserMessage(message) {
+        var messageElement = $('<div>').addClass('message user-message').text(message);
+        $('#chat-container').append(messageElement);
+    }
+    
+    $(document).ready(function() {
+        $('#chat-form').submit(function(event) {
+            event.preventDefault();
+            sendMessage();
+        });
+    
+        $('#voice-button').mousedown(function() {
+            longPressTimer = setTimeout(function() {
+                isLongPress = true;
+                toggleLongPressAnimation();
+                startSpeechToText();
+            }, 500);
+        }).mouseup(function() {
+            clearTimeout(longPressTimer);
+            if (isLongPress) {
+                isLongPress = false;
+                toggleLongPressAnimation();
+                stopSpeechToText();
+            } else {
+                sendMessage();
+            }
+        }).mouseleave(function() {
+            clearTimeout(longPressTimer);
+            if (isLongPress) {
+                isLongPress = false;
+                toggleLongPressAnimation();
+                stopSpeechToText();
+            }
+        });
+    });
+    
+    function toggleLongPressAnimation() {
+        var voiceButton = $('#voice-button');
+        voiceButton.toggleClass('long-press-animation');
+        if (isLongPress) {
+            voiceButton.removeClass('voice-animation');
+        } else {
+            voiceButton.addClass('voice-animation');
+        }
+        voiceButton.toggleClass('active');
+    }
+        </script>    
+</body>
+</html>
