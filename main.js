@@ -1,19 +1,19 @@
 document.addEventListener("DOMContentLoaded", function() {
     const body = document.querySelector("body");
     const content = document.querySelector(".content");
-  
+
     function initializeNavside() {
         const darkLight = document.querySelector("#darkLight");
         const sidebar = document.querySelector(".sidebar");
         const submenuItems = document.querySelectorAll(".submenu_item");
         const sidebarOpen = document.querySelector("#sidebarOpen");
-  
+
         darkLight.addEventListener("click", () => {
             body.classList.toggle("dark");
             darkLight.classList.toggle("fa-moon");
             darkLight.classList.toggle("fa-sun");
         });
-  
+
         sidebarOpen.addEventListener("click", function() {
             sidebar.classList.toggle("close");
             if (sidebar.classList.contains("close")) {
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 content.style.marginLeft = "260px";
             }
         });
-  
+
         submenuItems.forEach(function(item) {
             item.addEventListener("click", function() {
                 item.classList.toggle("show_submenu");
@@ -33,42 +33,40 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
             });
         });
-  
+
         function updateSidebar() {
             if (window.innerWidth < 768) {
                 sidebar.classList.add("close");
                 content.style.marginLeft = "0";
             } else {
                 sidebar.classList.remove("close");
-                if (!sidebar.classList.contains("hoverable")) {
-                    content.style.marginLeft = "260px";
-                }
+                content.style.marginLeft = "260px";
             }
         }
-  
+
         window.addEventListener("load", updateSidebar);
         window.addEventListener("resize", updateSidebar);
-  
+
         // Active warna menu sidebar ketika membuka sebuah halaman
         const currentPage = window.location.pathname.split('/').pop();
         const menuItems = document.querySelectorAll('.nav_link');
-  
+
         menuItems.forEach(item => {
             const itemPage = item.getAttribute('href');
             if (itemPage === currentPage) {
                 item.classList.add('active');
             }
         });
-  
-        // Menutup Sidebar ketika di klik di luar sidebar
+
+        // Menutup Sidebar ketika di klik di luar sidebar (untuk perangkat kecil)
         document.addEventListener("click", function(event) {
-            if (!sidebar.contains(event.target) && !sidebarOpen.contains(event.target) && !sidebar.classList.contains("close")) {
+            if (window.innerWidth < 768 && !sidebar.contains(event.target) && !sidebarOpen.contains(event.target) && !sidebar.classList.contains("close")) {
                 sidebar.classList.add("close");
                 content.style.marginLeft = "0";
             }
         });
     }
-  
+
     function includeHTML() {
         const includes = document.querySelectorAll('[data-include]');
         includes.forEach(el => {
@@ -83,7 +81,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 .catch(error => console.error('Error loading navside:', error));
         });
     }
-  
+
     includeHTML();
-  });
-  
+});
