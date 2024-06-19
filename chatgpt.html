@@ -160,6 +160,13 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        $(document).ready(function(){
+            $('[data-include]').each(function(){
+                var file = $(this).data('include');
+                $(this).load(file);
+            });
+        });
+        
         var isPlaying = false;
         var audioElement;
         var recognition;
@@ -257,37 +264,28 @@
             });
         });
         
-        // Event handler untuk tombol voice ketika ditekan
-$('#voice-button').on('mousedown touchstart', function(event) {
-    event.preventDefault();
-    toggleButtonAnimation(true);
-    longPressTimer = setTimeout(function() {
-        isLongPress = true;
-        startSpeechToText();
-    }, 500);
-}).on('mouseup touchend', function(event) {
-    event.preventDefault();
-    clearTimeout(longPressTimer);
-    if (!isLongPress) {
-        sendMessage();
-    }
-    isLongPress = false;
-    toggleButtonAnimation(false);
-}).on('mouseleave touchcancel', function(event) {
-    event.preventDefault();
-    clearTimeout(longPressTimer);
-    isLongPress = false;
-    toggleButtonAnimation(false);
-});
-
-function toggleButtonAnimation(isActive) {
-    var voiceButton = $('#voice-button');
-    if (isActive) {
-        voiceButton.css('transform', 'scale(1.2)');
-    } else {
-        voiceButton.css('transform', 'scale(1)');
-    }
-}
+        // Event handler untuk tombol voice ketika ditekan lama
+        $('#voice-button').on('mousedown touchstart', function(event) {
+            longPressTimer = setTimeout(function() {
+                isLongPress = true;
+                $('#voice-button').addClass('long-press-animation');
+                startSpeechToText();
+            }, 1000);  // 1000 ms = 1 detik
+        }).on('mouseup touchend', function(event) {
+            clearTimeout(longPressTimer);
+            if (!isLongPress) {
+                // Jika tidak menekan lama, jalankan fungsi biasa (playTextToSpeech atau stopTextToSpeech)
+                if (isPlaying) {
+                    stopTextToSpeech();
+                } else {
+                    playTextToSpeech($('#user-input').val());
+                }
+            } else {
+                recognition.stop();
+            }
+            $('#voice-button').removeClass('long-press-animation');
+            isLongPress = false;
+        });
     </script>
 </body>
 </html>
