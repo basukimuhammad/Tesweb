@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Encode your html to JSO (Javascript Overlay).">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="shortcut icon" href="https://telegra.ph/file/c1603a7e2cf99ab1ad084.jpg" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <title>Dashboard | Basuki Store</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    p {
+      text-align: justify;
+      margin-bottom: 20px;
+    }
+    code {
+      padding: 2px 5px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+    <div id="navside-container" data-include="navside.html"></div>
+        <div class="content">
+            <div class="container mx-auto max-w-xl p-8" id="app">
+                <h1 class="text-2xl font-bold mb-4">JSO Generator</h1>
+                <p class="text-gray-600 mb-4">Enkodekan HTML Kamu ke JSO (Javascript Overlay).</p>
+                <div>
+                    <div class="mb-4">
+                        <textarea v-model="html" class="w-full px-3 py-2 rounded-lg border border-gray-300 resize-none focus:outline-none focus:border-blue-500" placeholder="Enter your html here..." rows="6"></textarea>
+                    </div>
+                    <div>
+                        <button type="submit" style="color:white" class="bg-blue-500 px-4 py-2 rounded hover:bg-blue-600 transition duration-200" @click="submit">Submit</button>
+                    </div>
+                </div>
+                <div v-show="result">
+                    <p class="text-gray-800 mb-1 text-lg mt-5">Result:</p>
+                    <div class="flex items-center">
+                        <input type="text" class="w-full px-3 py-2 rounded-l-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Addon To Right" :value="result" id="pilih" readonly>
+                        <div class="input-group-append">
+                            <button type="button" @click="copy_text()" style="color:white" class="flex items-center px-3 py-2 rounded-r-md bg-blue-500 hover:bg-blue-600 focus:outline-none focus:bg-blue-600" id="basic-addon4">
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p style="margin-bottom: 20px; text-align: justify;">
+                <strong>Tujuan dan Konsep JSO (Javascript Overlay):</strong><br>
+                JSO atau Javascript Overlay adalah teknik yang digunakan untuk mengenkripsi atau menyembunyikan kode HTML di dalam JavaScript. Cara kerjanya adalah dengan mengonversi teks HTML ke dalam format yang bisa dievaluasi kembali menjadi HTML saat dijalankan oleh browser. Ini berguna dalam skenario di mana kamu ingin menyembunyikan atau melindungi kode HTML yang sensitif atau kompleks dari akses langsung oleh pengguna.
+              </p>
+              <p style="margin-bottom: 20px; text-align: justify;">
+                <strong>Komponen Script JSO:</strong><br>
+                <code>&lt;script&gt;</code> Tag: Tag ini digunakan untuk memuat skrip JavaScript di dalam halaman HTML. Dalam konteks JSO, ini adalah titik masuk di mana skrip JSO akan dimuat dan dieksekusi.<br>
+                <code>type="text/javascript"</code>: Atribut type menentukan jenis konten yang ada dalam tag <code>&lt;script&gt;</code>, yaitu JavaScript. Ini memastikan bahwa konten yang dimuat dari URL yang diberikan adalah skrip JavaScript yang akan dieksekusi oleh browser.<br>
+                <code>src="https://jso-tools.z-x.my.id/raw/~/U7GFCL6NAPOVA"</code>: Atribut src menunjukkan URL dari mana browser harus mengunduh skrip JavaScript. Dalam kasus ini, URL yang diberikan mengarah ke alamat di mana skrip JSO yang berisi HTML yang telah dienkripsi tersedia untuk diambil.
+              </p>
+              <p style="margin-bottom: 20px; text-align: justify;">
+                <strong>Proses Kerja:</strong><br>
+                Enkode HTML ke JSO: Sebelum skrip JSO ini dapat dibuat, HTML yang ingin disembunyikan atau dienkripsi harus diubah menjadi format JSO. Proses ini umumnya melibatkan enkode teks HTML ke dalam bentuk yang dapat dievaluasi kembali (misalnya, menggunakan Base64 atau metode enkode khusus lainnya).<br>
+                Pemuatan dan Eksekusi: Ketika browser menemui <code>&lt;script&gt;</code> dengan src yang ditetapkan ke URL JSO, ia mengunduh skrip dari server. Setelah diunduh, skrip ini dieksekusi. Dalam konteks JSO, skrip ini akan mengevaluasi teks HTML yang terenkripsi dan mengubahnya kembali menjadi struktur HTML yang sesuai, kemudian menempatkannya di dalam halaman web.
+              </p>
+              <p style="margin-bottom: 20px; text-align: justify;">
+                <strong>Penggunaan Umum:</strong><br>
+                Penggunaan JSO umumnya ditemukan dalam pengembangan web yang memerlukan keamanan tambahan terhadap kode HTML yang sensitif. Ini juga dapat digunakan untuk mengelola dan memuat konten dinamis atau tindakan yang kompleks tanpa perlu memaparkan detail implementasinya secara langsung di dalam kode sumber halaman web.<br>
+                Dengan demikian, <code>&lt;script type="text/javascript" src="https://jso-tools.z-x.my.id/raw/~/U7GFCL6NAPOVA"&gt;&lt;/script&gt;</code> adalah cara untuk menyuntikkan kembali kode HTML yang telah dienkripsi (JSO) ke dalam halaman web kamu melalui teknik JavaScript Overlay, memungkinkan kamu untuk menampilkan dan mengelola konten dengan tingkat keamanan yang lebih tinggi.
+              </p>
+            </div>    
+        </div>
+    <script src="main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://tools.zone-xsec.com/api/hit?m=js"></script>
+    <script>
+        const {
+            createApp
+        } = Vue
+        createApp({
+            data() {
+                return {
+                    html: '',
+                    result: ``
+                }
+            },
+            methods: {
+                submit() {
+                    if (this.html == '') {
+                        this.toast("Enter your script!", "linear-gradient(to right, #FF0000, #FF4500)")
+                        return;
+                    }
+                    let enc = btoa(this.html)
+                    let text = `document.documentElement.innerHTML=atob('${enc}');`
+                    let url = 'https://jso-tools.z-x.my.id/post'
+                    axios.post(url, text)
+                        .then(res => {
+                            if (res.status == 200) {
+                                if (res.data.path) {
+                                    this.result = `<script type="text/javascript" src="https://jso-tools.z-x.my.id/raw/~/${res.data.path}">` + '<' + '/script>';
+                                    this.toast("Created Successfully", "linear-gradient(to right, #00FF00, #008000)")
+                                } else {
+                                    this.toast("Failed", "linear-gradient(to right, #FF0000, #FF4500)")
+                                }
+                            }
+                        }).catch(err => {
+                            this.toast("Failed", "linear-gradient(to right, #FF0000, #FF4500)")
+                        })
+                },
+                copy_text() {
+                    const el = document.createElement('textarea');
+                    el.value = this.result;
+                    document.body.appendChild(el);
+                    el.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(el);
+                },
+                toast(text = "HI!", bg) {
+                    Toastify({
+                        text: text,
+                        newWindow: true,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        style: {
+                            background: bg,
+                        },
+                    }).showToast();
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
