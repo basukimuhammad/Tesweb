@@ -8,18 +8,135 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-  <title>Dashboard | Basuki Store</title>
+  <style>
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+    p {
+      margin-bottom: 20px;
+      text-align: justify;
+    }
+    .features {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .feature {
+      flex: 1;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin-right: 20px;
+    }
+    .feature:last-child {
+      margin-right: 0;
+    }
+    .feature h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #555;
+    }
+    .feature p {
+      color: #777;
+    }
+    .chat-container {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .chat-header, .chat-footer {
+      background-color: #ddd;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .chat-header h3 {
+      color: #333;
+      font-size: 1.2rem;
+      margin: 0;
+    }
+    .chat-body {
+      min-height: 150px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 10px;
+      overflow-y: auto;
+    }
+    .chat-footer input[type="text"] {
+      width: calc(100% - 50px);
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+    .chat-footer button {
+      width: 50px;
+      padding: 8px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+  <title>Dashboard | Basuki Tools</title>
 </head>
 <body>
   <div id="navside-container" data-include="navside.html"></div>
-  <div class="content">
+  <div class="container">
     <h1>Selamat Datang di Basuki Store!</h1>
     <p>Di sini Anda dapat menemukan berbagai produk berkualitas dengan harga terbaik.</p>
+
+    <div class="features">
+      <div class="feature">
+        <h2><i class="bi bi-cloud-sun"></i> Cuaca Hari Ini</h2>
+        <p>Informasi cuaca terkini di lokasi Anda.</p>
+        <div id="weather-info">
+          <!-- Placeholder untuk data cuaca -->
+          <p><strong>Temperature:</strong> 25°C</p>
+          <p><strong>Condition:</strong> Cerah</p>
+        </div>
+      </div>
+
+      <div class="feature">
+        <h2><i class="bi bi-clock"></i> Jam Realtime</h2>
+        <p>Jam digital yang menampilkan waktu secara realtime.</p>
+        <div id="realtime-clock">
+          <!-- Placeholder untuk jam realtime -->
+          12:00:00
+        </div>
+      </div>
+
+      <div class="feature">
+        <h2><i class="bi bi-tools"></i> Tools dan Layanan Online</h2>
+        <p>Penjelasan tentang berbagai tools dan layanan yang kami sediakan.</p>
+        <ul>
+          <li><strong>Tool 1:</strong> Deskripsi tool atau layanan 1.</li>
+          <li><strong>Tool 2:</strong> Deskripsi tool atau layanan 2.</li>
+          <li><strong>Tool 3:</strong> Deskripsi tool atau layanan 3.</li>
+        </ul>
+      </div>
+    </div>
+
     <div class="chat-container">
       <div class="chat-header">
         <h3>Chat with Us</h3>
       </div>
       <div class="chat-body" id="chatBody">
+        <!-- Chat body content -->
       </div>
       <div class="chat-footer">
         <input type="text" id="chatInput" placeholder="Type your message here..." />
@@ -27,18 +144,36 @@
       </div>
     </div>
   </div>
+  
   <script src="main.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-      const currentPage = window.location.pathname.split('/').pop();
-      const menuItems = document.querySelectorAll('.nav_link');
+    // Function to display weather information (example implementation)
+    function displayWeatherInfo() {
+      const weatherDiv = document.getElementById('weather-info');
+      // Simulated weather data for example purposes
+      const weatherData = {
+        temperature: '25°C',
+        condition: 'Cerah'
+      };
+      weatherDiv.innerHTML = `<p><strong>Temperature:</strong> ${weatherData.temperature}</p>
+                              <p><strong>Condition:</strong> ${weatherData.condition}</p>`;
+    }
 
-      menuItems.forEach(item => {
-        const itemPage = item.getAttribute('href');
-        if (itemPage === currentPage) {
-          item.classList.add('active');
-        }
-      });
+    // Function to display realtime clock (example implementation)
+    function displayRealtimeClock() {
+      const clockDiv = document.getElementById('realtime-clock');
+      setInterval(() => {
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        clockDiv.textContent = `${hours}:${minutes}:${seconds}`;
+      }, 1000); // Update every second
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      displayWeatherInfo(); // Panggil fungsi untuk menampilkan cuaca
+      displayRealtimeClock(); // Panggil fungsi untuk menampilkan jam realtime
     });
   </script>
 </body>
